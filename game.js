@@ -1,5 +1,9 @@
  const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
+// sons online
+const somPulo = new Audio("https://www.soundjay.com/buttons/sounds/button-16.mp3");
+const somGameOver = new Audio("https://www.soundjay.com/misc/sounds/fail-buzzer-02.mp3");
+
 
 canvas.width = 350;
 canvas.height = 500;
@@ -82,9 +86,23 @@ function update(){
 
 function endGame(){
   gameRunning=false;
-  alert("Game Over! Pontuação: "+score);
+  somGameOver.play();
+  setTimeout(()=>{
+    alert("Game Over! Pontuação: "+score);
+  },200);
 }
 
+
 // controlo toque/clique
-window.addEventListener("mousedown",()=> player.velocity=-6);
-window.addEventListener("touchstart",()=> player.velocity=-6);
+window.addEventListener("mousedown",()=>{
+  player.velocity=-6;
+  somPulo.currentTime=0;
+  somPulo.play();
+});
+
+window.addEventListener("touchstart",()=>{
+  player.velocity=-6;
+  somPulo.currentTime=0;
+  somPulo.play();
+});
+
