@@ -1,12 +1,12 @@
- const canvas = document.getElementById("gameCanvas");
+const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
-// sons online
-const somPulo = new Audio("https://www.soundjay.com/buttons/sounds/button-16.mp3");
-const somGameOver = new Audio("https://www.soundjay.com/misc/sounds/fail-buzzer-02.mp3");
-
 
 canvas.width = 350;
 canvas.height = 500;
+
+// 🔊 sons online simples
+const somPulo = new Audio("https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg");
+const somGameOver = new Audio("https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg");
 
 let player, obstacles, gravity, score, gameRunning, speed;
 
@@ -43,7 +43,6 @@ function update(){
 
   ctx.clearRect(0,0,canvas.width,canvas.height);
 
-  // jogador
   player.velocity += gravity;
   player.y += player.velocity;
 
@@ -52,7 +51,6 @@ function update(){
   ctx.arc(player.x,player.y,player.size,0,Math.PI*2);
   ctx.fill();
 
-  // obstáculos
   ctx.fillStyle="red";
   for(let i=0;i<obstacles.length;i++){
     let o = obstacles[i];
@@ -61,14 +59,12 @@ function update(){
     ctx.fillRect(o.x,0,o.width,o.top);
     ctx.fillRect(o.x,o.bottom,o.width,canvas.height);
 
-    // colisão
     if(player.x+player.size>o.x && player.x-player.size<o.x+o.width){
       if(player.y-player.size<o.top || player.y+player.size>o.bottom){
         endGame();
       }
     }
 
-    // pontuação
     if(o.x+o.width===player.x){
       score++;
       document.getElementById("score").textContent = score;
@@ -76,7 +72,6 @@ function update(){
     }
   }
 
-  // chão e teto
   if(player.y>canvas.height || player.y<0){
     endGame();
   }
@@ -85,24 +80,27 @@ function update(){
 }
 
 function endGame(){
+  if(!gameRunning) return;
   gameRunning=false;
+
+  somGameOver.currentTime=0;
   somGameOver.play();
+
   setTimeout(()=>{
     alert("Game Over! Pontuação: "+score);
   },200);
 }
 
-
-// controlo toque/clique
 window.addEventListener("mousedown",()=>{
+  if(!gameRunning) return;
   player.velocity=-6;
   somPulo.currentTime=0;
   somPulo.play();
 });
 
 window.addEventListener("touchstart",()=>{
+  if(!gameRunning) return;
   player.velocity=-6;
   somPulo.currentTime=0;
   somPulo.play();
 });
-
